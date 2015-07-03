@@ -1454,6 +1454,7 @@ def _make_new(request, form):
   data_url = _get_data_url(form)
   if data_url is None:
     return None
+  # data is upload diff file
   data, url, separate_patches = data_url
 
   reviewers = _get_emails(form, 'reviewers')
