@@ -1,1 +1,1 @@
-./manage.py runserver 127.0.0.1:8000
+./manage.py runserver 127.0.0.1:8000 -v 2 --traceback
