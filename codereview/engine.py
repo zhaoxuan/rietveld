@@ -845,7 +845,7 @@ def ToText(text):
     try:
       return db.Text(text, encoding='utf-8')
     except UnicodeDecodeError:
-      return db.Text(text, encoding='latin-1')
+      return db.Text(text, encoding='utf-8')
 
 
 def UnifyLinebreaks(text):
@@ -857,4 +857,6 @@ def UnifyLinebreaks(text):
   Returns:
     A string with all line breaks converted to LF.
   """
-  return text.replace('\r\n', '\n').replace('\r', '\n')
+  # JOHN.ZHAO change it, dont change \r\n to \r
+  return text
+  # return text.replace('\r\n', '\n').replace('\r', '\n')
