@@ -50,6 +50,7 @@ import sys
 import urllib
 import urllib2
 import urlparse
+# debug
 import pdb
 
 # The md5 module was deprecated in Python 2.5.
@@ -73,7 +74,7 @@ except ImportError:
 #  1: Status messages.
 #  2: Info logs.
 #  3: Debug logs.
-verbosity = 1
+verbosity = 3
 
 # The account type used for authentication.
 # This line could be changed by the review server (see handler for
@@ -979,7 +980,11 @@ class SubversionVCS(VersionControlSystem):
       cmd += ["-r", self.options.revision]
     cmd += ["--diff-cmd=diff"]
     cmd.extend(args)
-    data = RunShell(cmd)
+    # data = RunShell(cmd)
+    # use RunShell, that data string is different from shell
+    f = os.popen(" ".join(cmd))
+    data = f.read()
+    f.close()
     count = 0
     for line in data.splitlines():
       if line.startswith("Index:") or line.startswith("Property changes on:"):
@@ -2147,10 +2152,11 @@ def RealMain(argv, data=None):
     vcs.CheckForUnknownFiles()
   if data is None:
     data = vcs.GenerateDiff(args)
-  data = vcs.PostProcessDiff(data)
+  vcs.PostProcessDiff(data)
   if options.print_diffs:
     print "Rietveld diff start:*****"
     print data
+    print md5(data).hexdigest()
     print "Rietveld diff end:*****"
   files = vcs.GetBaseFiles(data)
   if verbosity >= 1:
@@ -2168,6 +2174,8 @@ def RealMain(argv, data=None):
                             options.save_cookies,
                             options.account_type)
   form_fields = [("subject", message)]
+  # calculate diff data md5
+  # form_fields.append(("md5sum", md5(data).hexdigest()))
   if base:
     b = urlparse.urlparse(base)
     username, netloc = urllib.splituser(b.netloc)
@@ -2259,7 +2267,7 @@ def main():
   try:
     logging.basicConfig(format=("%(asctime).19s %(levelname)s %(filename)s:"
                                 "%(lineno)s %(message)s "))
-    os.environ['LC_ALL'] = 'C'
+    os.environ['LC_ALL'] = 'en_US.UTF-8'
     RealMain(sys.argv)
   except KeyboardInterrupt:
     print
