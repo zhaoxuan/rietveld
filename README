@@ -42,26 +42,11 @@ to initialize the example database.
 will run Rietveld in development mode.
 
 
-Production Deployment
+Upload code to serve
 =====================
 
-The preferred method to deploy Django applications is to use WSGI supporting
-web server. You may copy codereview.wsgi.example and edit it to change
-/var/rietveld path to point to your installation.
 
-There is one important thing to remember. Django serves media (static) files
-only in development mode. For running Rietveld in a production environment,
-you need to setup your web-server to serve the /static/ alias directly.
 
-http://docs.djangoproject.com/en/dev/howto/deployment/modpython/#serving-media-files
-
-There is the example configuration for running Rietveld with Apache2+mod_wsgi
-Feel free to copy it from apache.conf.example. You may need to change
-'codereview' user name in WSGI directives and adjust paths to match your
-installation.
-
-When running in a production environment, keep in Django's CSRF
-protection is disabled in this example!
 
 
 Adding Users
