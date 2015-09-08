@@ -1063,15 +1063,20 @@ def all(request):
   closed = request.GET.get('closed') or ''
   nav_parameters = {}
   if closed:
-    nav_parameters['closed'] = '1'
+    nav_parameters['closed'] = closed
 
-  if closed:
+  if closed == '':
     query = db.GqlQuery('SELECT * FROM Issue '
                         'WHERE private = FALSE '
                         'ORDER BY modified DESC')
   else:
-    query = db.GqlQuery('SELECT * FROM Issue '
+    if closed == '1':
+      query = db.GqlQuery('SELECT * FROM Issue '
                         'WHERE closed = FALSE AND private = FALSE '
+                        'ORDER BY modified DESC')
+    else:
+      query = db.GqlQuery('SELECT * FROM Issue '
+                        'WHERE closed = TRUE AND private = FALSE '
                         'ORDER BY modified DESC')
 
   return _paginate_issues(reverse(all),
