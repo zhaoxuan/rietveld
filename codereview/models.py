@@ -797,3 +797,14 @@ class Account(db.Model):
     when = int(time.time()) // 3600 + offset
     m.update(str(when))
     return m.hexdigest()
+
+class Project(db.Model):
+  name = db.StringProperty()
+  created = db.DateTimeProperty(auto_now_add=True)
+  modified = db.DateTimeProperty(auto_now=True)
+
+class UserProject(db.Model):
+  user_id = db.IntegerProperty()
+  project_id = db.IntegerProperty()
+  created = db.DateTimeProperty(auto_now_add=True)
+  modified = db.DateTimeProperty(auto_now=True)
