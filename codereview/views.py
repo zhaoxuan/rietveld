@@ -995,6 +995,7 @@ def _paginate_issues(page_url,
     'limit': limit,
     'first': offset + 1,
     'nexttext': 'Older',
+    'count': query.count()
   }
   # Fetch one more to see if there should be a 'next' link
   issues = query.fetch(limit+1, offset)
@@ -3710,3 +3711,23 @@ def customized_upload_py(request):
                             'DEFAULT_REVIEW_SERVER = "%s"' % review_server)
 
   return HttpResponse(source, content_type='text/x-python')
+
+@issue_required
+def approval(request):
+  """/approval/<issue> - Gets issue's closed as a True or False."""
+  closed = request.issue.closed
+  return HttpResponse(closed, content_type='text/plain')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
