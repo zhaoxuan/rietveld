@@ -96,7 +96,7 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE = 'codereview.Account'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/login/?next=/'
 
 # This won't work with gae2django.
 RIETVELD_INCOMING_MAIL_ADDRESS = None
