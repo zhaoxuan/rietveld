@@ -80,6 +80,7 @@ urlpatterns = patterns(
     # patching upload.py on the fly
     (r'^dynamic/upload.py$', 'customized_upload_py'),
     (r'^search$', 'search'),
+    (r'^approval/(\d+)$', 'approval')
     )
 
 feed_dict = {
