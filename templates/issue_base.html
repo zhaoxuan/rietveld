@@ -17,11 +17,13 @@
     | -->
     <a href="{%url codereview.views.mine%}">My Issues</a>
     |
+    <a href="{%url codereview.views.all%}">All</a>
+    |
+    <a href="{%url codereview.views.all%}?closed=1">Open</a>
+    |
+    <a href="{%url codereview.views.all%}?closed=0">Closed</a>
+    |
     <a href="{%url codereview.views.starred%}">Starred</a>
-    |
-    <a href="{%url codereview.views.all%}">Open</a>
-    |
-    <a href="{%url codereview.views.all%}?closed=1">All</a>
   {%else%}
     <a class="novisit" href="{%url codereview.views.index%}">Open Issues</a>
     |
