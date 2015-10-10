@@ -102,8 +102,13 @@ class Issue(db.Model):
   def edit_allowed(self):
     """Whether the current user can edit this issue."""
     account = Account.current_user_account
+
     if account is None:
       return False
+
+    if account.user.is_superuser:
+      return True
+
     return self.user_can_edit(account.user)
 
   def update_comment_count(self, n):
