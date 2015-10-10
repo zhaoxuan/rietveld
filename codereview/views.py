@@ -3720,11 +3720,15 @@ def customized_upload_py(request):
 @issue_required
 def approval(request):
   """/approval/<issue> - Gets issue's closed as a True or False."""
-  closed = request.issue.closed
-  return HttpResponse(closed, content_type='text/plain')
+  issue = request.issue
+  closed = issue.closed
 
-
-
+  issue.valided_time += 1
+  issue.save()
+  if issue.valided_time <= 1:
+    return HttpResponse(True, content_type='text/plain')
+  else:
+    return HttpResponse(False, content_type='text/plain')
 
 
 
