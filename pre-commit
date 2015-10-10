@@ -1,0 +1,77 @@
+#!/bin/sh
+
+API_IP="http://127.0.0.1:8000/approval"
+
+REPOS="$1"
+TXN="$2"
+SVNLOOK=/usr/local/bin/svnlook
+#SVNLOOK=/opt/bme/local/subversion/bin/svnlook
+
+# svnlook
+LOGMSG=`$SVNLOOK log -t "$TXN" "$REPOS"`
+COMMENT_COUNT=$(echo "$LOGMSG" | wc -c )
+#AUTHOR=`$SVNLOOK author -t "$TXN" "$REPOS"`
+#CHANGED=`$SVNLOOK changed -t "$TXN" "$REPOS"`
+FILES=$($SVNLOOK changed -t "$TXN" "$REPOS" | awk '/^[AU]/ {print $NF}')
+FILES_COUNT=$(echo "$FILES" | wc -l)
+#DIFF=`$SVNLOOK diff -t "$TXN" "$REPOS"`
+
+HEADER=$(echo "$LOGMSG" | awk -F ' ' '{print $1}')
+ISSUE=$(echo "$HEADER" | awk -F '=' '{print $1}')
+ISSUE_NUMBER=$(echo "$HEADER" | awk -F '=' '{print $2}')
+
+# You can commit 5 files once.
+if [ "$FILES_COUNT" -gt 5 ]; then
+    echo "You can commit 5 files once time!." 1>&2
+    exit 1
+fi
+
+# The length of commit message must more than 5 chars.
+if [ "$COMMENT_COUNT" -lt 5 ]; then
+    echo "Log message cann't be empty! you must input more than 5 chars as comment!." 1>&2
+    exit 1
+fi
+
+if [ "x$ISSUE" = "x" ]; then
+    echo "Please set ISSUE=<issue_number> in beginning of comment." 1>&2
+    exit 1
+fi
+
+# if [ "x$ISSUE_NUMBER" = "xIGNORE" ]; then
+#     exit 0
+# fi
+
+# if [ "x$ISSUE" = "xISSUE" ]; then
+#    CLOSED=$(\curl --silent "$API_IP/$ISSUE_NUMBER")
+
+#    if [ "x$CLOSED" = "xTrue" ]; then
+#        echo "commit is approval." 1>&2
+#        exit 0
+#    else
+#        echo "Please set ISSUE=<issue_number> in beginning of comment." 1>&2
+#        exit 1
+#    fi
+# fi
+
+if [ "x$ISSUE_NUMBER" != "x" ]; then
+    VALIDED_URL="$API_IP/$ISSUE_NUMBER"
+    CLOSED=$(\curl --silent "$API_IP/$ISSUE_NUMBER")
+
+    if [[ "x$CLOSED" = "xTrue" ]]; then
+        # if return True, then commit into SVN
+        exit 0
+    else
+        echo "This ISSUE='$ISSUE_NUMBER' is not allowed to into SVN repository!!!" 1>&2
+        exit 1
+    fi
+fi
+
+echo "Please set ISSUE=<issue_number> in beginning of comment." 1>&2
+exit 1
+
+
+
+
+
+
+
