@@ -165,7 +165,7 @@ var publish_link = "{%url codereview.views.publish issue.key.id%}";
 <div style="float:left; font-weight:bold"><i>Rietveld</i> Code Review Tool</div>
 {%endif%}
 {%if user%}
-<b>{{user.email}} ({%nickname user True%})</b>
+<b>{%nickname user True%}</b>
 |
 {%if must_choose_nickname%}
 <span style="color:red">Please choose your nickname with</span>{%endif%}
