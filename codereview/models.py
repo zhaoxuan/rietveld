@@ -81,6 +81,7 @@ class Issue(db.Model):
   closed = db.BooleanProperty(default=False)
   private = db.BooleanProperty(default=False)
   n_comments = db.IntegerProperty()
+  valided_time = db.IntegerProperty(default=0)
 
   _is_starred = None
 
@@ -584,14 +585,15 @@ class Account(db.Model):
   def get_account_for_user(cls, user):
     """Get the Account for a user, creating a default one if needed."""
     email = user.email()
-    assert email
+    # assert email
     key = '<%s>' % email
-    # Since usually the account already exists, first try getting it
-    # without the transaction implied by get_or_insert().
-    account = cls.get_by_key_name(key)
-    if account is not None:
-      return account
-    nickname = cls.create_nickname_for_user(user)
+    # # Since usually the account already exists, first try getting it
+    # # without the transaction implied by get_or_insert().
+    # account = cls.get_by_key_name(key)
+    # if account is not None:
+    #   return account
+    # nickname = cls.create_nickname_for_user(user)
+    nickname = user.username
     return cls.get_or_insert(key, user=user, email=email, nickname=nickname,
                              fresh=True)
 
@@ -618,7 +620,7 @@ class Account(db.Model):
   @classmethod
   def get_account_for_email(cls, email):
     """Get the Account for an email address, or return None."""
-    assert email
+    # assert email
     key = '<%s>' % email
     return cls.get_by_key_name(key)
 
