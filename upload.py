@@ -50,8 +50,6 @@ import sys
 import urllib
 import urllib2
 import urlparse
-# debug
-import pdb
 
 # The md5 module was deprecated in Python 2.5.
 try:
@@ -83,7 +81,7 @@ AUTH_ACCOUNT_TYPE = "HOSTED"
 
 # URL of the default review server. As for AUTH_ACCOUNT_TYPE, this line could be
 # changed by the review server (see handler for upload.py).
-DEFAULT_REVIEW_SERVER = "127.0.0.1:8000"
+DEFAULT_REVIEW_SERVER = "codereview.baifendian.com"
 
 # Max size of patch or base file.
 MAX_UPLOAD_SIZE = 900 * 1024
