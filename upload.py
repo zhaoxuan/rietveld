@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#coding:utf-8
 #
 # Copyright 2007 Google Inc.
 #
@@ -50,6 +51,9 @@ import sys
 import urllib
 import urllib2
 import urlparse
+
+reload(sys)
+sys.setdefaultencoding("UTF-8")
 
 # The md5 module was deprecated in Python 2.5.
 try:
@@ -685,6 +689,10 @@ def EncodeMultipartFormData(fields, files):
     lines.append('')
     if isinstance(value, unicode):
       value = value.encode('utf-8')
+
+    if sys.platform.startswith("win"):
+      value = value.decode("cp936").encode("utf-8")
+
     lines.append(value)
   for (key, filename, value) in files:
     lines.append('--' + BOUNDARY)
@@ -976,7 +984,10 @@ class SubversionVCS(VersionControlSystem):
     cmd = ["svn", "diff"]
     if self.options.revision:
       cmd += ["-r", self.options.revision]
-    cmd += ["--diff-cmd=diff"]
+
+    # if not in win system, change diff-cmd
+    if sys.platform.startswith('win') == False:
+      cmd += ["--diff-cmd=diff"]
     cmd.extend(args)
     # data = RunShell(cmd)
     # use RunShell, that data string is different from shell
