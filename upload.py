@@ -52,6 +52,7 @@ import urllib
 import urllib2
 import urlparse
 
+# set default encoding to UTF-8
 reload(sys)
 sys.setdefaultencoding("UTF-8")
 
@@ -690,6 +691,8 @@ def EncodeMultipartFormData(fields, files):
     if isinstance(value, unicode):
       value = value.encode('utf-8')
 
+    # In windows, default encoding of command line is ascii,
+    # so changing string from cp936(ascii) to utf-8
     if sys.platform.startswith("win"):
       value = value.decode("cp936").encode("utf-8")
 
@@ -702,7 +705,14 @@ def EncodeMultipartFormData(fields, files):
     lines.append('')
     if isinstance(value, unicode):
       value = value.encode('utf-8')
+
+    # In windows, default encoding of command line is ascii,
+    # so changing string from cp936(ascii) to utf-8
+    if sys.platform.startswith("win"):
+      value = value.decode("cp936").encode("utf-8")
+
     lines.append(value)
+
   lines.append('--' + BOUNDARY + '--')
   lines.append('')
   body = CRLF.join(lines)
