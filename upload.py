@@ -517,6 +517,8 @@ group.add_option("--noisy", action="store_const", const=3,
                  dest="verbose", help="Print all logs.")
 group.add_option("--print_diffs", dest="print_diffs", action="store_true",
                  help="Print full diffs.")
+group.add_option("--print_upload", dest="print_upload", action="store_true",
+                 help="Print full uploaded files.")
 # Review server
 group = parser.add_option_group("Review server options")
 group.add_option("-s", "--server", action="store", dest="server",
@@ -2179,9 +2181,11 @@ def RealMain(argv, data=None):
     print md5(data).hexdigest()
     print "Rietveld diff end:*****"
   files = vcs.GetBaseFiles(data)
-  print "The following files will be uploaded to codereview tool."
-  for f in files:
-    print "    " + f
+
+  if options.print_upload:
+    print "The following files will be uploaded to codereview tool."
+    for f in files:
+      print "    " + f
 
   if verbosity >= 1:
     print "Upload server:", options.server, "(change with -s/--server)"
