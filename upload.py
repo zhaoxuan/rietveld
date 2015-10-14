@@ -2179,7 +2179,7 @@ def RealMain(argv, data=None):
     print md5(data).hexdigest()
     print "Rietveld diff end:*****"
   files = vcs.GetBaseFiles(data)
-  print "The following files will be upload to codereview tool."
+  print "The following files will be uploaded to codereview tool."
   for f in files:
     print "    " + f
     pass
