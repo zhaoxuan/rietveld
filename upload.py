@@ -2167,8 +2167,9 @@ def RealMain(argv, data=None):
   if not base and options.download_base:
     options.download_base = True
     logging.info("Enabled upload of base file")
-  if not options.assume_yes:
-    vcs.CheckForUnknownFiles()
+  # check files those is not in version control.
+  # if not options.assume_yes:
+  #   vcs.CheckForUnknownFiles()
   if data is None:
     data = vcs.GenerateDiff(args)
   vcs.PostProcessDiff(data)
@@ -2178,6 +2179,11 @@ def RealMain(argv, data=None):
     print md5(data).hexdigest()
     print "Rietveld diff end:*****"
   files = vcs.GetBaseFiles(data)
+  print "The following files will be upload to codereview tool."
+  for f in files:
+    print "    " + f
+    pass
+
   if verbosity >= 1:
     print "Upload server:", options.server, "(change with -s/--server)"
   if options.issue:
