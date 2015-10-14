@@ -3730,7 +3730,11 @@ def approval(request):
   else:
     return HttpResponse(False, content_type='text/plain')
 
+def projects(request):
+  """/projects - Show the list of known projects."""
+  projects = models.Project.all()
 
+  return respond(request, 'projects.html', {'projects': projects})
 
 
 

@@ -1,0 +1,16 @@
+{%extends "base.html"%}
+{%block mainmenu%}
+<a href="{%url codereview.views.index%}">Issues</a>
+<a href="{%url codereview.views.projects%}" class="active">Projects</a>
+{%endblock%}
+{%block title1%}Projects -{%endblock%}
+{%block body%}
+<h2>Projects</h2>
+
+<div id="repoview">
+{%for repo in projects%}
+  <div>{{repo.name}}</div>
+{%endfor%}
+</div>
+<a href="/">New Project</a>
+{%endblock%}

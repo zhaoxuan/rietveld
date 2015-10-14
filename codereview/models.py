@@ -813,5 +813,20 @@ class Project(db.Model):
 class UserProject(db.Model):
   user_id = db.IntegerProperty()
   project_id = db.IntegerProperty()
+  # owner: owner has three permissions, commit, review code and close status of issue, and modify permission.
+  # reviewer: reviewer can commit code and review code and close status of issue.
+  # coder: coder can only commit code.
+  permission = db.StringProperty()
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now=True)
+
+
+
+
+
+
+
+
+
+
+
