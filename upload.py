@@ -517,8 +517,8 @@ group.add_option("--noisy", action="store_const", const=3,
                  dest="verbose", help="Print all logs.")
 group.add_option("--print_diffs", dest="print_diffs", action="store_true",
                  help="Print full diffs.")
-group.add_option("--print_upload", dest="print_upload", action="store_true",
-                 help="Print full uploaded files.")
+group.add_option("--print_upload", dest="print_upload", action="store_true", 
+                 default=True, help="Print full uploaded files.")
 # Review server
 group = parser.add_option_group("Review server options")
 group.add_option("-s", "--server", action="store", dest="server",
