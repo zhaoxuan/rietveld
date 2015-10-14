@@ -2182,7 +2182,6 @@ def RealMain(argv, data=None):
   print "The following files will be uploaded to codereview tool."
   for f in files:
     print "    " + f
-    pass
 
   if verbosity >= 1:
     print "Upload server:", options.server, "(change with -s/--server)"
