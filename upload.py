@@ -113,6 +113,9 @@ VCS_ABBREVIATIONS = {
 # The result of parsing Subversion's [auto-props] setting.
 svn_auto_props_map = None
 
+# Global ignore files
+GLOBAL_IGNORE = "*.o *.lo *.la *.al .libs *.so *.so.[0-9]* *.a *.pyc *.pyo *.log node_modules bower_components .DS_Store ._* .idea* *.iml .name workspace.xml compiler.xml *.prefs classes *.class *.pid target logs .classpath .project .settings"
+
 def GetEmail(prompt):
   """Prompts the user for their email address and returns it.
 
@@ -517,8 +520,10 @@ group.add_option("--noisy", action="store_const", const=3,
                  dest="verbose", help="Print all logs.")
 group.add_option("--print_diffs", dest="print_diffs", action="store_true",
                  help="Print full diffs.")
-group.add_option("--print_upload", dest="print_upload", action="store_true", 
+group.add_option("--print_upload", dest="print_upload", action="store_true",
                  default=True, help="Print full uploaded files.")
+group.add_option("--excludes", dest="excludes", action="store_true",
+                 default=True, help="Exlude some files.")
 # Review server
 group = parser.add_option_group("Review server options")
 group.add_option("-s", "--server", action="store", dest="server",
@@ -606,6 +611,25 @@ group.add_option("--p4_client", action="store", dest="p4_client",
 group.add_option("--p4_user", action="store", dest="p4_user",
                  metavar="P4_USER", default=None,
                  help=("Perforce user"))
+
+def exclude_files(files):
+  try:
+    import fnmatch
+    ignores = {}
+    exclude_names = []
+    file_names = files.keys()
+
+    for wildcard in GLOBAL_IGNORE.split(" "):
+      exclude_names = fnmatch.filter(file_names, wildcard)
+      if len(exclude_names) != 0:
+        for name in exclude_names:
+          files.pop(name)
+        del exclude_names[:]
+
+    return files
+  except Exception, e:
+    print "ERROR in excluding files process, so upload all modify files."
+    return files
 
 def GetRpcServer(server, email=None, host_override=None, save_cookies=True,
                  account_type=AUTH_ACCOUNT_TYPE):
@@ -2182,8 +2206,14 @@ def RealMain(argv, data=None):
     print "Rietveld diff end:*****"
   files = vcs.GetBaseFiles(data)
 
+  if options.excludes:
+    files = exclude_files(files)
+
+  if len(files) == 0:
+    ErrorExit("None file will be uploaded.")
+
   if options.print_upload:
-    print "The following files will be uploaded to codereview tool."
+    print "The following files will be uploaded to codereview app:"
     for f in files:
       print "    " + f
 
