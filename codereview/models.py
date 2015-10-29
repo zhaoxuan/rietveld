@@ -807,6 +807,7 @@ class Account(db.Model):
 
 class Project(db.Model):
   name = db.StringProperty()
+  owner = db.StringProperty()
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now=True)
 
