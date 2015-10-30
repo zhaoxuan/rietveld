@@ -3722,6 +3722,12 @@ def approval(request):
   """/approval/<issue> - Gets issue's closed as a True or False."""
   issue = request.issue
   closed = issue.closed
+  svn_commit_file_count = request.GET['file_count']
+
+  # if svn commit file number great than upload file number
+  # it will deny commit
+  if int(svn_commit_file_count) > issue.get_patch_size:
+    return HttpResponse(False, content_type='text/plain')
 
   issue.valided_time += 1
   issue.save()

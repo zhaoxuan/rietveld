@@ -55,7 +55,7 @@ fi
 
 if [ "x$ISSUE_NUMBER" != "x" ]; then
     VALIDED_URL="$API_IP/$ISSUE_NUMBER"
-    CLOSED=$(\curl --silent "$API_IP/$ISSUE_NUMBER")
+    CLOSED=$(\curl --silent "$API_IP/$ISSUE_NUMBER?file_count=$((FILES_COUNT))")
 
     if [[ "x$CLOSED" = "xTrue" ]]; then
         # if return True, then commit into SVN

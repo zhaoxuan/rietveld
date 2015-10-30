@@ -159,6 +159,12 @@ class Issue(db.Model):
         self._num_drafts = query.count()
     return self._num_drafts
 
+  @property
+  def get_patch_size(self):
+    patch_set = PatchSet.objects.get(issue = self.id)
+    patchs = Patch.objects.all().filter(patchset = patch_set.id)
+    return len(patchs)
+
 
 class PatchSet(db.Model):
   """A set of patchset uploaded together.
