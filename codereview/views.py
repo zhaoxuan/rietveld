@@ -3723,17 +3723,20 @@ def approval(request):
   issue = request.issue
   closed = issue.closed
   svn_commit_file_count = request.GET['file_count']
+  result = ""
 
   # if svn commit file number great than upload file number
   # it will deny commit
   if int(svn_commit_file_count) > issue.get_patch_size:
-    return HttpResponse(False, content_type='text/plain')
+    result = "The file quantity of svn commit is great than uploaded quantity, Please repeat python upload.py!!!"
+    return HttpResponse(result, content_type='text/plain')
 
   issue.valided_time += 1
   issue.save()
   if issue.valided_time <= 1:
     return HttpResponse(True, content_type='text/plain')
   else:
+    result = "This issue number has been used, Please repeat python upload.py!!!"
     return HttpResponse(False, content_type='text/plain')
 
 def projects(request):
