@@ -1147,12 +1147,15 @@ class SubversionVCS(VersionControlSystem):
     if status[0] == "A" and status[3] != "+":
       # We'll need to upload the new content if we're adding a binary file
       # since diff's output won't contain it.
-      mimetype = RunShell(["svn", "propget", "svn:mime-type",
-                           self._EscapeFilename(filename)], silent_ok=True)
+      mimetype, returncode = RunShellWithReturnCode(["svn", "propget", "svn:mime-type",
+                           self._EscapeFilename(filename)])
       base_content = ""
-      is_binary = bool(mimetype) and not mimetype.startswith("text/")
-      if is_binary and self.IsImage(filename):
-        new_content = self.ReadFile(filename)
+      if returncode == 0:
+        is_binary = bool(mimetype) and not mimetype.startswith("text/")
+        if is_binary and self.IsImage(filename):
+          new_content = self.ReadFile(filename)
+      else:
+        is_binary = False
     elif (status[0] in ("M", "D", "R") or
           (status[0] == "A" and status[3] == "+") or  # Copied file.
           (status[0] == " " and status[1] == "M")):  # Property change.
